@@ -9,7 +9,9 @@ RUN useradd -c "KBase user" -rd /kb/deployment/ -u 998 -s /bin/bash kbase && \
     chown -R kbase /kb/deployment
 
 # Get commonly used utilities
-RUN yum -y update && yum -y install -y wget which git deltarpm
+RUN yum -y update && yum -y install -y wget which git deltarpm && \
+yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel 
+
 
 # Install Condor
 RUN cd /etc/yum.repos.d && \
@@ -41,8 +43,8 @@ RUN usermod -a -G 0 kbase && usermod -a -G 999 kbase
 
 #ADD DIRS
 RUN mkdir -p /var/run/condor && mkdir -p /var/log/condor && mkdir -p /var/lock/condor && mkdir -p /var/lib/condor/execute
-RUN touch /var/log/condor/StartLog /var/log/condor/ProcLog && chmod 775 /var/log/condor/* 
-RUN chown -R kbase:kbase /etc/condor /run/condor /var/lock/condor /var/log/condor /var/lib/condor/execute /var/log/condor/StartLog /var/log/condor/ProcLog
+#RUN touch /var/log/condor/StartLog /var/log/condor/ProcLog && chmod 778 /var/log/condor/* /var/lock/condor 
+#RUN chown -R kbase:kbase /etc/condor /run/condor /var/lock/condor /var/log/condor /var/lib/condor/execute /var/log/condor/StartLog /var/log/condor/ProcLog
 
 COPY --chown=kbase deployment/ /kb/deployment/
 
